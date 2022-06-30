@@ -1,0 +1,19 @@
+version: '3.4'
+
+services:
+  ftp:
+    image: ${DOCKER_REGISTRY}ftp-server:${DOCKER_TAG:-latest}
+    build: ./build
+    init: true
+    environment:
+      ADDRESS: "${ADDRESS:?ADDRESS must be set}"
+      USERS: "${USERS}"
+    ports:
+      - "21:21"
+      - "21000-21010:21000-21010"
+    volumes:
+      - "ftp-data:/ftp"
+
+volumes:
+  ftp-data:
+    name: "${VOLUME:?VOLUME must be set}"

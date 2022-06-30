@@ -1,4 +1,4 @@
-ARG BASE_IMG=alpine:3.15
+ARG BASE_IMG=alpine:3.16
 
 FROM $BASE_IMG AS pidproxy
 
@@ -17,12 +17,15 @@ RUN apk --no-cache add alpine-sdk \
 FROM $BASE_IMG
 
 COPY --from=pidproxy /usr/bin/pidproxy /usr/bin/pidproxy
-RUN apk --no-cache add vsftpd tini
+RUN \
+  apk update && \
+  apk upgrade && \
+  apk add \
+  vsftpd \
+  tini && \
+  rm -rf /var/cache/apk/*
 
-COPY start_vsftpd.sh /bin/start_vsftpd.sh
+COPY --chmod=744 start_vsftpd.sh /bin/start_vsftpd.sh
 COPY vsftpd.conf /etc/vsftpd/vsftpd.conf
-
-EXPOSE 21 21000-21010
-VOLUME /ftp/ftp
 
 ENTRYPOINT ["/sbin/tini", "--", "/bin/start_vsftpd.sh"]
