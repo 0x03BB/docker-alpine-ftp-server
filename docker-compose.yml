@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     init: true
     environment:
-      ADDRESS: "${ADDRESS:?ADDRESS must be set}"
+      ADDRESS: "${ADDRESS:?}"
       USERS: "${USERS}"
     ports:
       - "21:21"
@@ -17,4 +17,4 @@ services:
 
 volumes:
   ftp-data:
-    name: "${VOLUME:?VOLUME must be set}"
+    name: "${VOLUME:?}"
