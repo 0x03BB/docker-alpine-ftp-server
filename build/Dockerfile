@@ -1,13 +1,10 @@
-FROM alpine:latest AS upgrade
+FROM alpine:latest AS base
+
+
+FROM base AS pidproxy
 
 RUN \
   apk update && \
-  apk upgrade
-
-
-FROM upgrade AS pidproxy
-
-RUN \
   apk add alpine-sdk && \
   git clone https://github.com/ZentriaMC/pidproxy.git && \
   cd pidproxy && \
@@ -21,10 +18,12 @@ RUN \
   rm -rf /var/cache/apk/*
 
 
-FROM upgrade
+FROM base
 
 COPY --from=pidproxy /usr/bin/pidproxy /usr/bin/pidproxy
 RUN \
+  apk update && \
+  apk upgrade && \
   apk add vsftpd && \
   rm -rf /var/cache/apk/*
 
