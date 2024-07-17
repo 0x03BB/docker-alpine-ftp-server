@@ -1,9 +1,6 @@
-version: '3.4'
-
 services:
   ftp:
     image: ${DOCKER_REGISTRY}ftp-server:${DOCKER_TAG:-latest}
-    build: ./build
     restart: unless-stopped
     init: true
     environment:

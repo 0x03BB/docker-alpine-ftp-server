@@ -1,0 +1,4 @@
+services:
+  ftp:
+    build: ../build
+    image: ${DOCKER_REGISTRY}ftp-server:${DOCKER_TAG:-latest}
